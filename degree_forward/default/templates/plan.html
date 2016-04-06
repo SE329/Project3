@@ -10,13 +10,13 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body style="min-height: 100%">
-    <div class="container-fluid col-xs-9" style="background-color: #ffffb3; padding-top: 20px; padding-bottom: 20px; min-height: 100%">
+    <div class="container-fluid col-xs-9" style="background-color: lightgrey; padding-top: 20px; padding-bottom: 20px; min-height: 100%">
         <div class="container-fluid" style="margin-bottom:20px">
             {{ plan }} - {{ credits }} credits
         </div>
         <div class="container-fluid">
             {% for list in classList %}
-            <div class="container-fluid" style="background-color: #9cc2e3; border-radius: 15px; margin-bottom: 10px" id="{{ forloop.counter }}">
+            <div class="container-fluid" style="outline: 1px solid grey; margin-bottom: 10px" id="{{ forloop.counter }}">
                 <div class = "container col-xs-2" style="margin-top: 10px; margin-bottom: 10px">
                     {% with forloop.counter as x %}
                     Semester {{ x }} <br>
@@ -26,7 +26,7 @@
                 </div>
                 {% for class in list %}
                 <div class="container col-xs-1 {{ forloop.parentloop.counter }}class" style="margin-top: 10px; margin-bottom: 10px; margin-right: 30px;" id="{{ class.code }}">
-                    <button class="container-fluid" style="border-radius: 5px; width: 80px" onclick="edit('{{ class.code }}')" id="{{ class.code }}inner">{{ class.code }} {{ class.credits }} cr</button>
+                    <button class="container-fluid" style="outline: 1px solid black; width: 65px" onclick="edit('{{ class.code }}')" id="{{ class.code }}inner">{{ class.code }} {{ class.credits }} cr</button>
                     <input type="hidden" id="{{ class.code }}-sem" value="{{ forloop.parentloop.counter }}">
                     <input type="hidden" id="{{ class.code }}-prereqs" value="{{ class.prereqs }}">
                 </div>
@@ -35,7 +35,7 @@
             {% endfor %}
         </div>
     </div>
-    <div class="container-fluid col-xs-3 fill" style="background-color: #9cc2e3; padding-top: 30px; min-height: 100%">
+    <div class="container-fluid col-xs-3 fill" style="background-color: lightsteelblue; padding-top: 30px; min-height: 100%">
         <form action="/plan/" method="POST">{% csrf_token %}
             <select name="plan">
                 {% for plan in allplans %}
@@ -57,13 +57,13 @@
 
             </div>
         </div>
-        <div class="container-fluid" style="margin-bottom: 30px; background-color: #ffffb3; border-radius: 10px;"><font color="#ff0000">
-            <strong>Completed Courses: <br>
+        <div class="container-fluid" style="outline: 1px solid black; margin-bottom: 30px; background-color: lightyellow">
+            Completed Courses: <br>
             Credits: <div id="cpcredits" style="display: inline">0</div>
             <div class = "container-fluid" id="completed">
-	    </strong>
+
             </div>
-        </font></div>
+        </div>
     </div>
 
     <div class="hidden" id="catalog">
