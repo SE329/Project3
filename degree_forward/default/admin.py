@@ -4,15 +4,23 @@ from .models import *
 # Register your models here.
 
 
-@admin.register(DegreePlan)
+@admin.register(DegreePlanTemplate)
 class DegreePlanAdmin(admin.ModelAdmin):
     list_display = ['Major']
 
 
-@admin.register(Semester)
+@admin.register(SemesterTemplate)
 class SemesterAdmin(admin.ModelAdmin):
-    list_display = ['Number', 'Term', 'Classes']
+    list_display = ['Classes']
 
 @admin.register(ClassListing)
 class ClassAdmin(admin.ModelAdmin):
     list_display = ['name', 'code', 'credits', 'term', 'prereqs', 'coreqs', 'satisfies']
+
+@admin.register(UserSemester)
+class SemAdmin(admin.ModelAdmin):
+    list_display = ['pk']
+
+@admin.register(UserDegreePlan)
+class DegPlan(admin.ModelAdmin):
+    list_display = ['pk', 'Major', 'LinkedUser']
