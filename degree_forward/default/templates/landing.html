@@ -7,14 +7,14 @@
     <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body style="background-color: #9cc2e3">
+    <div class="jumbotron col-xs-10 col-xs-offset-1" style="background-color: #ffffb3; border-bottom-right-radius: 25px; border-bottom-left-radius: 25px;">
     Welcome {{ uname }}! <button class="btn" onclick="logout()">Logout</button>
     {% if error %}
     <div class="container col-xs-8 col-xs-offset-2">
         <h3>{{ error }}</h3>
     </div>
     {% endif %}
-    <div class="container col-xs-8 col-xs-offset-2">
         Create a new plan:
         <div class="container col-xs-9 col-xs-offset-2">
             <form action="/newPlan/" method="POST">
@@ -32,7 +32,7 @@
             </form>
         </div>
     </div>
-    <div class="container col-xs-8 col-xs-offset-2">
+    <div class="container col-xs-8 col-xs-offset-2" style="background-color: #ffffb3; border-top: 20px; padding-top: 20px; padding-bottom: 20px; min-height: 100%; border-radius: 25px;">
     Restore a previous plan:
         <div class="container col-xs-9 col-xs-offset-2">
             <form action="/existingPlan/" method="POST">
