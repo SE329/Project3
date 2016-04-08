@@ -80,62 +80,65 @@
         }
 
         function edit(classcode, semester){
-            var x = window.prompt("Please Type the command you wish to perform (Choices are Move/Complete/Incomplete/Delete)").trim();
-            if(x == null) return;
-            if(x.toLowerCase() == 'move'){
+            var retval = confirm("Do you want to move this course?");
+            if(retval == true){
                 var destSem = window.prompt("Which semester would you like to move this class to?")
                 moveClass(classcode, destSem);
+                return;
             }
-            else if(x.toLowerCase() == 'complete'){
-                 if(document.getElementById(classcode + "inner").style.backgroundColor == "") {
-                      var info = document.getElementById(classcode + '-info').value;
-                      var infos = info.split(',');
-                      var prereqs = infos[1].split(';');
-                      if (prereqs[0] != 'NONE') {
-                          for (var i = 0; i < prereqs.length; i++) {
-                              pr = prereqs[i];
-                              if (!(document.getElementById("completed").innerHTML.indexOf(pr.trim()) > -1)) {
-                                  alert("WARNING: Degree Plan invalid. You can't complete "+classcode+" without completing "+prereqs[i]);
-                              }
-                          }
-                      }
-                      document.getElementById(classcode + "inner").style.backgroundColor = "lightgreen";
-                      var content = document.getElementById(classcode + "inner").innerHTML;
-                      document.getElementById("completed").innerHTML += '<p>'+content+'</p>';
-                      changeCredits(classcode, 2);
+
+             if(document.getElementById(classcode + "inner").style.backgroundColor == "") {
+                 retval = confirm("Do you want to mark this course as complete?");
+                 if(retval == true) {
+                     var info = document.getElementById(classcode + '-info').value;
+                     var infos = info.split(',');
+                     var prereqs = infos[1].split(';');
+                     if (prereqs[0] != 'NONE') {
+                         for (var i = 0; i < prereqs.length; i++) {
+                             pr = prereqs[i];
+                             if (!(document.getElementById("completed").innerHTML.indexOf(pr.trim()) > -1)) {
+                                 alert("WARNING: Degree Plan invalid. You can't complete " + classcode + " without completing " + prereqs[i]);
+                             }
+                         }
+                     }
+                     document.getElementById(classcode + "inner").style.backgroundColor = "lightgreen";
+                     var content = document.getElementById(classcode + "inner").innerHTML;
+                     document.getElementById("completed").innerHTML += '<p>' + content + '</p>';
+                     changeCredits(classcode, 2);
+                     return;
                  }
-            }
-            else if(x.toLowerCase() == 'incomplete') {
-                if(document.getElementById(classcode + "inner").style.backgroundColor == "lightgreen") {
+             }
+            if(document.getElementById(classcode + "inner").style.backgroundColor == "lightgreen") {
+                retval = confirm("Do you want to mark this course as complete?");
+                if(retval == true) {
                     document.getElementById(classcode + "inner").style.backgroundColor = "";
                     var content = document.getElementById(classcode + "inner").innerHTML;
                     var complete = document.getElementById("completed").innerHTML;
                     complete2 = complete.replace('<p>'+content+'</p>', "");
                     document.getElementById("completed").innerHTML = complete2;
                     changeCredits(classcode, 3)
+                    return
                 }
             }
-            else if(x.toLowerCase() == 'delete'){
+            var retval = confirm("Do you want to delete this course?");
+            if(retval == true){
                 if(document.getElementById(classcode + "inner").style.backgroundColor == "") changeCredits(classcode, 0);
-                var choice = window.prompt("Has this class been completed? (Yes/No)");
-                if(choice.toLowerCase() == 'yes'){
+                var choice = confirm("Has this class been completed?");
+                if(choice == True){
                     var content = document.getElementById(classcode + "inner").innerHTML;
                     document.getElementById("completed").innerHTML += '<p>'+content+'</p>';
                     var div = document.getElementById(classcode);
                     div.parentNode.removeChild(div);
                 }
-                else if(choice.toLowerCase() == 'no'){
+                else {
                     var div = document.getElementById(classcode);
                     div.parentNode.removeChild(div);
                 }
-                else {
-                    alert("Invald input. Please Try Again.");
-                }
+                return;
             }
-            else{
-                alert("Invalid Input. Try Again.");
-                edit(classcode);
-            }
+
+            alert("No Option Chose");
+            return
         }
 
         function changeCredits(cc, add){
@@ -164,6 +167,7 @@
         }
 
         function moveClass(cc, dest) {
+
             var info = document.getElementById(cc + '-info').value;
             var infos = info.split(',');
             var prereqs = infos[1].split(';');
@@ -206,6 +210,19 @@
                         '</div>';
                 document.getElementById(dest).innerHTML += writestring;
                 changeCredits(cc, 1);
+            /*
+            var div = document.getElementById(cc);
+            var parent = div.parentNode;
+            alert(parent);
+
+            $.post( "/moveClass/", { plan: id, dest: dest, classcode: cc, csrfmiddlewaretoken:getCookie('csrftoken') }).success(function(data){
+                    if(data.indexOf("WARN-CROB") > -1){
+                        alert("WARN: Destination is over 21 credits.");
+                    }
+                    alert("Add Successful");
+                    document.getElementById("refresh").submit();
+                });
+                */
         }
 
         function getCookie(name) {

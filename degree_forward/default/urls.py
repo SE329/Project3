@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^newPlan/', views.makeNewDegree, name='newPlan'),
     url(r'^existingPlan/', views.loadPrevDegree, name='existingPlan'),
     url(r'^addClass/', views.addClass, name='addclass'),
-    url(r'^logout/', views.logout_view, name='logout')
+    url(r'^logout/', views.logout_view, name='logout'),
+    url(r'^moveClass/', views.moveClass, name='moveClass')
 ]

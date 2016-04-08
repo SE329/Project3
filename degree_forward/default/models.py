@@ -35,6 +35,7 @@ class DegreePlanTemplate(models.Model):
     Semester7 = models.TextField(default='NONE')
     Semester8 = models.TextField(default='NONE')
 
+
 class UserDegreePlan(models.Model):
     ENTRY_TERM_CHOICES = (
         ('F', 'Fall'),
@@ -46,6 +47,7 @@ class UserDegreePlan(models.Model):
     CreditsRemaining = models.IntegerField()
     Semesters = models.TextField(null=False)
 
+
 class UserSemester(models.Model):
     TERM_CHOICES = (
         ('F', 'Fall'),
@@ -56,3 +58,8 @@ class UserSemester(models.Model):
     Term = models.CharField(max_length=2, choices=TERM_CHOICES)
     Classes = models.TextField(null=True)
     Credits = models.IntegerField(default=0)
+
+
+class CompletedClassList(models.Model):
+    UserID = models.IntegerField(unique=True, primary_key=True);
+    List = models.TextField(null=True)

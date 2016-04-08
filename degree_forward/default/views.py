@@ -168,7 +168,7 @@ def expandDegree(useplan, request):
     ClassString = ""
     ClassCategories = []
     for c in classes:
-        codes = c.code.split(' ');
+        codes = c.code.split(' ')
         category = ""
         for item in codes:
             if not tryint(item):
@@ -293,14 +293,16 @@ def removeClass(request):
     planID = request.POST.get("plan", "")
     semester = request.POST.get("semester", "")
     classcode = request.POST.get("classcode", "")
+
     plan = UserDegreePlan.objects.get(pk=planID)
     semIdString = plan.Semesters
     semIds = semIdString.split(';')
+
     requestedclass = ClassListing.objects.get(code=classcode)
     destSemester = UserSemester.objects.get(pk=semIds[int(semester)])
     status = 'OK'
 
-    if destSemester.Credits == 0 or (destSemester.Credits + requestedclass.credits > 21):
+    if destSemester.Credits - requestedclass.credits <= 0:
         status = 'WARN-RMSM'
 
     if requestedclass.prereqs is not None or requestedclass.coreqs is not None:
@@ -339,7 +341,37 @@ def removeClass(request):
     return HttpResponse(status)
 
 
+def moveClass(request):
+    planID = request.POST.get("plan", "")
+    source = request.POST.get("src", "")
+    destination = request.POST.get("dest","")
+    classcode = request.POST.get("classcode", "")
 
-#def saveSemChanges(request):
+    plan = UserDegreePlan.objects.get(pk=planID)
+    semIdString = plan.Semesters
+    semIds = semIdString.split(';')
 
-#def saveSemOrder(request):
+    movingclass = ClassListing.objects.get(code=classcode)
+    sourceSemester = UserSemester.objects.get(pk=semIds[int(source)])
+    destSemester = UserSemester.objects.get(pk=semIds[int(destination)])
+    status = 'OK'
+
+    if destSemester.Credits == 21 or (destSemester.Credits + movingclass.credits > 21):
+        status = 'WARN-CROB'
+
+    sourceSemester.Classes -= classcode + ';'
+    sourceSemester.Credits -= movingclass.credits
+    destSemester.Classes += classcode + ';'
+    destSemester.Classes += movingclass.credits
+
+    sourceSemester.save()
+    destSemester.save()
+
+    return HttpResponse(status)
+
+
+def addCompletedCourse(request):
+    userID = request.user.id
+    course = request.POST.get("course","") + ';'
+    list = CompletedClassList.objects.get_or_create(userID=userID, defaults={'List': course})
+
