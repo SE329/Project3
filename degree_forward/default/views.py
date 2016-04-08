@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.template import loader
@@ -36,6 +36,14 @@ def auth(request):
             error = "Invalid Username or Password."
             context = {error}
             render(request, 'application.html', context)
+    else:
+        error = "Invalid Username or Password."
+        context = {error}
+        render(request, 'application.html', context)
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')
 
 def landing(request):
     if request.user.is_authenticated():

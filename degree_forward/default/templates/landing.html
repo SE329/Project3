@@ -8,7 +8,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
-    Welcome {{ uname }}!
+    Welcome {{ uname }}! <button class="btn" onclick="logout()">Logout</button>
     {% if error %}
     <div class="container col-xs-8 col-xs-offset-2">
         <h3>{{ error }}</h3>
@@ -48,4 +48,9 @@
         </div>
     </div>
 </body>
+<script>
+    function logout(){
+        window.location = '/logout/';
+    }
+</script>
 </html>

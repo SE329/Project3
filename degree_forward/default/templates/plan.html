@@ -12,7 +12,7 @@
 <body style="min-height: 100%">
     <div class="container-fluid col-xs-9" style="background-color: #ffffb3; padding-top: 20px; padding-bottom: 20px; min-height: 100%">
         <div class="container-fluid" style="margin-bottom:20px">
-            {{ plan }} - {{ credits }} credits
+            {{ plan.Major }} - {{ credits }} credits
         </div>
         <div class="container-fluid">
             {% for list in classList %}
@@ -66,6 +66,11 @@
         <input type="hidden" id="{{ class.code }}-info" value="{{ class.credits }},{{ class.prereqs }},{{ class.satisfies }}">
         {% endfor %}
     </div>
+
+    <form action="plan.html" method="post" id="refresh" style="visibility: hidden">
+        {% csrf_token %}
+        <input type="hidden" id="planID" name="planID" value="{{ plan.pk }}">
+    </form>
 
     <script>
         loadCatDropdown();
@@ -233,14 +238,11 @@
                     }
                     else if(data.indexOf("WARN-CROB") > -1){
                         alert("WARN: Destination is over 21 credits.");
-                        $.post("/existingPlan/", { plan:id, csrfmiddlewaretoken:getCookie('csrftoken') });
+                        document.getElementById("refresh").submit();
                     }
                     else {
                         alert("Add Successful");
-                        $.post("/existingPlan/", { plan:id, csrfmiddlewaretoken:getCookie('csrftoken') }, function(data){
-                            document.close();
-                            document.write(data);
-                        });
+                        document.getElementById("refresh").submit();
                     }
                 });
             }
